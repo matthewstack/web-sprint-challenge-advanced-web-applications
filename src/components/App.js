@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Route } from "react-router-dom";
 import styled from "styled-components";
 
@@ -10,18 +10,43 @@ import View from "./View";
 import PrivateRoute from "./PrivateRoute";
 
 const App = () => {
+  const [loggedIn, setLoggedIn] = useState(false);
+  // This is to force a render in the Header component so that the menu refreshes when user logs in or out
+  const token = localStorage.getItem("token");
+  function checkLocalStorage() {
+    if (token) {
+      setLoggedIn(true);
+    } else {
+      setLoggedIn(false);
+    }
+  }
+  useEffect(() => {
+    checkLocalStorage(token);
+
+    const handler = ({ token }) => checkLocalStorage(token);
+    window.addEventListener("storage", handler);
+    return () => window.removeEventListener("storage", handler);
+  }, []);
+  // This checks for a token incase the page is refreshed
   return (
     <AppContainer>
       <BloomHeader />
-      <Header />
+      <Header loggedIn={loggedIn} />
       <RouteContainer>
-        <Route exact path="/" component={Login} />
+        <Route exact path="/">
+          <Login loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
+        </Route>
 
-        <Route exact path="/login" component={Login} />
-
+        <Route exact path="/login">
+          <Login loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
+        </Route>
         <PrivateRoute exact path="/view" component={View} />
-
-        <PrivateRoute exact path="/logout" component={Logout} />
+        <PrivateRoute
+          exact
+          path="/logout"
+          component={Logout}
+          setLoggedIn={setLoggedIn}
+        />
       </RouteContainer>
     </AppContainer>
   );

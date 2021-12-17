@@ -8,11 +8,12 @@ const initialValues = {
   password: "",
 };
 
-const Login = () => {
+const Login = (props) => {
   const [credentials, setCredentials] = useState(initialValues);
   const [error, setError] = useState("");
 
   let history = useHistory();
+  const { setLoggedIn } = props;
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -23,13 +24,15 @@ const Login = () => {
         localStorage.setItem("token", token);
         localStorage.setItem("username", username);
         localStorage.setItem("role", role);
+
         setError("");
         setCredentials(initialValues);
+        setLoggedIn(true);
         history.push("/view");
       })
       .catch((err) => {
         console.log(err);
-        setError("Error logging in");
+        setError("Incorrect login information");
       });
   };
 
@@ -65,7 +68,7 @@ const Login = () => {
           <br />
           <button id="submit">Submit</button>
         </form>
-        <p id="error">{error}</p>
+        <ErrorText id="error">{error}</ErrorText>
       </ModalContainer>
     </ComponentContainer>
   );
@@ -114,4 +117,8 @@ const Input = styled.input`
 const Button = styled.button`
   padding: 1rem;
   width: 100%;
+`;
+
+const ErrorText = styled.p`
+  color: red;
 `;

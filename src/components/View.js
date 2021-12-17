@@ -16,6 +16,7 @@ const View = (props) => {
     axiosWithAuth()
       .get(`/articles`)
       .then((res) => {
+        console.log(res.data);
         setArticles(res.data);
       })
       .catch((err) => {
@@ -36,6 +37,7 @@ const View = (props) => {
   };
 
   const handleEdit = (article) => {
+    console.log(article.id);
     axiosWithAuth()
       .put(`articles/${article.id}`, article)
       .then((res) => {
@@ -79,7 +81,8 @@ const View = (props) => {
   return (
     <ComponentContainer>
       <HeaderContainer>
-        View Articles <button onClick={addHelper}>Add Article</button>
+        View Articles{" "}
+        <AddArticleButton onClick={addHelper}>Add Article</AddArticleButton>
       </HeaderContainer>
       <ContentContainer flexDirection="row">
         <ArticleContainer>
@@ -127,6 +130,8 @@ const Container = styled.div`
   padding: 0.5em;
 `;
 const HeaderContainer = styled.h1`
+  display: flex;
+  justify-content: space-between;
   border-bottom: solid black 2px;
   padding: 1em;
   margin: 0;
@@ -154,4 +159,18 @@ const ContentContainer = styled.div`
 
 const ArticleContainer = styled.div`
   background: grey;
+`;
+
+const AddArticleButton = styled.button`
+
+    background-color: white;
+    border-radius: 4px;
+    color: black;
+    border: 2px solid #e7e7e7;
+    font-size: 24px;
+  
+  
+  &:hover {
+    background-color: #555555;
+    color: white;
 `;

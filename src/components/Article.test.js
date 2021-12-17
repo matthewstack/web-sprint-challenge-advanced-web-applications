@@ -39,15 +39,22 @@ test("renders headline, author from the article when passed in through props", (
 
 test('renders "Associated Press" when no author is given', () => {
   render(<Article article={testArticle2} />);
-  //   const theAuthor = screen.findByTestId("author");
 
   const associatedPress = screen.getByText(/Associated Press/i);
-  //   expect(theAuthor).toHaveTextContent(/Associated Press/i);
 
   expect(associatedPress).toBeTruthy();
 });
 
-test("executes handleDelete when the delete button is pressed", () => {});
+test("executes handleDelete when the delete button is pressed", async () => {
+  const handleDeleteMock = jest.fn();
+
+  render(<Article handleDelete={handleDeleteMock} article={testArticle2} />);
+
+  const deleteButton = screen.getByTestId("deleteButton");
+  userEvent.click(deleteButton);
+
+  await waitFor(() => expect(handleDeleteMock).toHaveBeenCalled());
+});
 
 //Task List:
 //1. Complete all above tests. Create test article data when needed.

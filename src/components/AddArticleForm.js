@@ -2,11 +2,14 @@ import React, { useState } from "react";
 import styled from "styled-components";
 
 const initialArticle = {
-  id: "",
+  id: JSON.stringify(Date.now()),
+  //   had to stringify or it wasn't pulling ID correctly
   headline: "",
   author: "",
   summary: "",
   body: "",
+  image: Math.floor(Math.random() * 100),
+  //   This creates a random number and rounds down to nearest whole number
 };
 
 const AddArticleForm = (props) => {
@@ -20,7 +23,6 @@ const AddArticleForm = (props) => {
       [e.target.name]: e.target.value,
     });
   };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     handleAdd(article);
@@ -37,37 +39,21 @@ const AddArticleForm = (props) => {
         <label>Headline</label>
         <input
           value={article.headline}
-          id="headline"
           name="headline"
           onChange={handleChange}
         />
       </div>
       <div>
         <label>Author</label>
-        <input
-          value={article.author}
-          id="author"
-          name="author"
-          onChange={handleChange}
-        />
+        <input value={article.author} name="author" onChange={handleChange} />
       </div>
       <div>
         <label>Summary</label>
-        <input
-          value={article.summary}
-          id="summary"
-          name="summary"
-          onChange={handleChange}
-        />
+        <input value={article.summary} name="summary" onChange={handleChange} />
       </div>
       <div>
         <label>Body</label>
-        <input
-          value={article.body}
-          id="body"
-          name="body"
-          onChange={handleChange}
-        />
+        <input value={article.body} name="body" onChange={handleChange} />
       </div>
       <Button id="addButton">Add Article</Button>
       <Button onClick={handleCancel}>Cancel</Button>
