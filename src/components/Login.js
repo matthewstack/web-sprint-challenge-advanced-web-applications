@@ -10,17 +10,25 @@ const initialValues = {
 
 const Login = () => {
   const [credentials, setCredentials] = useState(initialValues);
+  const [error, setError] = useState("");
 
   const handleLogin = (e) => {
-    console.log(e);
-
     e.preventDefault();
-    axios.post("http://localhost:5000/api/login", credentials).then((res) => {
-      console.log(res);
-      const { token, username } = res.data;
-      localStorage.setItem("token", token);
-      localStorage.setItem("username", username);
-    });
+    axios
+      .post("http://localhost:5000/api/login", credentials)
+      .then((res) => {
+        console.log(res);
+        const { token, username, role } = res.data;
+        localStorage.setItem("token", token);
+        localStorage.setItem("username", username);
+        localStorage.setItem("role", role);
+        setError("");
+        setCredentials(initialValues);
+      })
+      .catch((err) => {
+        console.log(err);
+        setError("Error logging in");
+      });
   };
 
   const handleChange = (e) => {
@@ -52,8 +60,10 @@ const Login = () => {
             value={credentials.password}
             onChange={handleChange}
           />
+          <br />
           <button id="submit">Submit</button>
         </form>
+        <p id="error">{error}</p>
       </ModalContainer>
     </ComponentContainer>
   );
