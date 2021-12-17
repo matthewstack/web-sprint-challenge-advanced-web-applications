@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import axiosWithAuth from "../utils/axiosWithAuth";
 
 const initialArticle = {
   id: "",
@@ -10,20 +9,10 @@ const initialArticle = {
   body: "",
 };
 
-const EditForm = (props) => {
+const AddArticleForm = (props) => {
   const [article, setArticle] = useState(initialArticle);
-  const { handleEdit, handleEditCancel, editId } = props;
 
-  useEffect(() => {
-    axiosWithAuth()
-      .get(`/articles/${editId}`)
-      .then((res) => {
-        setArticle(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+  const { handleAdd, handleAddCancel } = props;
 
   const handleChange = (e) => {
     setArticle({
@@ -34,17 +23,16 @@ const EditForm = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    handleEdit(article);
+    handleAdd(article);
   };
 
   const handleCancel = (e) => {
     e.preventDefault();
-    handleEditCancel();
+    handleAddCancel();
   };
-
   return (
     <FormContainer onSubmit={handleSubmit}>
-      <h3>Edit Article</h3>
+      <h3>Add Article</h3>
       <div>
         <label>Headline</label>
         <input
@@ -81,17 +69,13 @@ const EditForm = (props) => {
           onChange={handleChange}
         />
       </div>
-      <Button id="editButton">Edit Article</Button>
+      <Button id="addButton">Add Article</Button>
       <Button onClick={handleCancel}>Cancel</Button>
     </FormContainer>
   );
 };
 
-export default EditForm;
-
-//Task List:
-// 1. On mount, make a http request to retrieve the article with the id `editId.`
-// 2. Save result of request to local state.
+export default AddArticleForm;
 
 const FormContainer = styled.form`
   padding: 1em;

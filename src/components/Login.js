@@ -12,18 +12,20 @@ const Login = () => {
   const [credentials, setCredentials] = useState(initialValues);
   const [error, setError] = useState("");
 
+  let history = useHistory();
+
   const handleLogin = (e) => {
     e.preventDefault();
     axios
       .post("http://localhost:5000/api/login", credentials)
       .then((res) => {
-        console.log(res);
         const { token, username, role } = res.data;
         localStorage.setItem("token", token);
         localStorage.setItem("username", username);
         localStorage.setItem("role", role);
         setError("");
         setCredentials(initialValues);
+        history.push("/view");
       })
       .catch((err) => {
         console.log(err);
